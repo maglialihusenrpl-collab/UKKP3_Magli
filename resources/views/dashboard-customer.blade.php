@@ -114,8 +114,9 @@
                             <td>
                                 @if ($pengaduan->lampiran)
                                     @if (in_array(strtolower(pathinfo($pengaduan->lampiran, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png'], true))
-                                        <a href="{{ route('pengaduan.attachment', $pengaduan) }}" target="_blank" rel="noopener">
-                                            <img class="attachment-preview" src="{{ route('pengaduan.attachment', $pengaduan) }}" alt="Foto lampiran pengaduan" loading="lazy">
+                                        @php($photoUrl = route('pengaduan.attachment', $pengaduan).'?v='.($pengaduan->updated_at?->timestamp ?? $pengaduan->id))
+                                        <a href="{{ $photoUrl }}" target="_blank" rel="noopener" aria-label="Buka foto lampiran">
+                                            <img class="attachment-preview" src="{{ $photoUrl }}" alt="" loading="eager" width="160" height="110">
                                         </a>
                                     @else
                                         <a href="{{ route('pengaduan.attachment', $pengaduan) }}">Lihat file</a>

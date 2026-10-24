@@ -64,6 +64,29 @@ class PengaduanController extends Controller
             'File lampiran tidak ditemukan.'
         );
 
+        $extension = strtolower(pathinfo($pengaduan->lampiran, PATHINFO_EXTENSION));
+
+        if (in_array($extension, ['jpg', 'jpeg', 'png'], true)) {
+            $image = @imagecreatefromstring(Storage::disk('public')->get($pengaduan->lampiran));
+            abort_unless($image !== false, 404, 'Foto tidak dapat dibaca.');
+
+            ob_start();
+            if ($extension === 'png') {
+                imagepng($image);
+                $contentType = 'image/png';
+            } else {
+                imagejpeg($image, null, 90);
+                $contentType = 'image/jpeg';
+            }
+            $imageContents = ob_get_clean();
+            imagedestroy($image);
+
+            return response($imageContents, 200, [
+                'Content-Type' => $contentType,
+                'Cache-Control' => 'private, max-age=3600',
+            ]);
+        }
+
         return Storage::disk('public')->response($pengaduan->lampiran);
     }
 

@@ -153,6 +153,7 @@
 						<th>Judul</th>
 						<th>Status</th>
 						<th>Tanggal</th>
+						<th>Foto</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -172,6 +173,18 @@
 							<td>{{ $pengaduan->judul }}</td>
 							<td><span class="status-pill {{ $statusClass }}">{{ $pengaduan->status }}</span></td>
 							<td data-order="{{ $pengaduan->created_at?->timestamp }}">{{ $pengaduan->created_at?->format('d/m/Y H:i') }}</td>
+							<td>
+								@if ($pengaduan->lampiran && in_array(strtolower(pathinfo($pengaduan->lampiran, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png'], true))
+									@php($photoUrl = route('pengaduan.attachment', $pengaduan).'?v='.($pengaduan->updated_at?->timestamp ?? $pengaduan->id))
+									<a href="{{ $photoUrl }}" target="_blank" rel="noopener" aria-label="Buka foto lampiran">
+										<img class="attachment-preview" src="{{ $photoUrl }}" alt="" loading="eager" width="160" height="110">
+									</a>
+								@elseif ($pengaduan->lampiran)
+									<a href="{{ route('pengaduan.attachment', $pengaduan) }}">Lihat file</a>
+								@else
+									-
+								@endif
+							</td>
 						</tr>
 					@endforeach
 				</tbody>

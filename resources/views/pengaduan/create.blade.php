@@ -184,7 +184,7 @@
                     <div class="form-field full-width">
                         <label for="lampiran">Lampiran (opsional, maks. 5 MB)</label>
                         <input id="lampiran" type="file" name="lampiran" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                        <img id="lampiran-preview" class="attachment-preview" alt="Pratinjau foto lampiran" hidden>
+                        <img id="lampiran-preview" class="attachment-preview" alt="" hidden>
                         @error('lampiran') <span class="form-error">{{ $message }}</span> @enderror
                     </div>
                 </div>
