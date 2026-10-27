@@ -1,3 +1,4 @@
+{{-- Dashboard admin: ringkasan jumlah pengaduan dan tabel pengaduan terbaru. --}}
 @extends('layouts.app')
 
 @section('title', 'Dashboard')
@@ -114,6 +115,7 @@
 @endpush
 
 @section('content')
+	{{-- Kartu statistik merangkum seluruh pengaduan menurut statusnya. --}}
 	<div class="dashboard-heading">
 		<div>
 			<h1 class="page-title">Dashboard Pengaduan</h1>
@@ -141,6 +143,7 @@
 		</article>
 	</section>
 
+	{{-- Tabel menampilkan pengaduan terbaru beserta status dan lampirannya. --}}
 	<section class="card">
 		<h2>Pengaduan terbaru</h2>
 		<div class="table-wrap">

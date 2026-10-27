@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,7 +11,7 @@ use RuntimeException;
 
 class PengaduanController extends Controller
 {
-    // Menampilkan semua data pengaduan
+    /** Menampilkan daftar pengaduan terbaru untuk dikelola admin. */
     public function index()
     {
         $pengaduans = Pengaduan::latest()->get();
@@ -18,13 +19,15 @@ class PengaduanController extends Controller
         return view('pengaduan.index', compact('pengaduans'));
     }
 
-    // Menampilkan form tambah pengaduan
+    /** Menampilkan formulir pembuatan pengaduan customer. */
     public function create()
     {
-        return view('pengaduan.create');
+        return view('pengaduan.create', [
+            'kategoris' => Kategori::orderBy('name')->get(),
+        ]);
     }
 
-    // Menyimpan pengaduan baru
+    /** Memvalidasi dan menyimpan pengaduan baru beserta lampiran opsional. */
     public function store(Request $request)
     {
         $validated = $this->validatePengaduan($request);
@@ -45,12 +48,13 @@ class PengaduanController extends Controller
             ->with('success', 'Pengaduan berhasil ditambahkan.');
     }
 
-    // Menampilkan detail pengaduan
+    /** Menampilkan detail satu pengaduan. */
     public function show(Pengaduan $pengaduan)
     {
         return view('pengaduan.show', compact('pengaduan'));
     }
 
+    /** Mengirim lampiran hanya kepada admin atau pemilik pengaduan. */
     public function attachment(Pengaduan $pengaduan)
     {
         abort_unless(
@@ -90,13 +94,16 @@ class PengaduanController extends Controller
         return Storage::disk('public')->response($pengaduan->lampiran);
     }
 
-    // Menampilkan form edit pengaduan
+    /** Menampilkan formulir untuk mengubah data pengaduan. */
     public function edit(Pengaduan $pengaduan)
     {
-        return view('pengaduan.edit', compact('pengaduan'));
+        return view('pengaduan.edit', [
+            'pengaduan' => $pengaduan,
+            'kategoris' => Kategori::orderBy('name')->get(),
+        ]);
     }
 
-    // Memperbarui pengaduan
+    /** Memvalidasi perubahan dan mengganti lampiran lama jika ada lampiran baru. */
     public function update(Request $request, Pengaduan $pengaduan)
     {
         $validated = $this->validatePengaduan($request, false, $pengaduan);
@@ -122,6 +129,7 @@ class PengaduanController extends Controller
             ->with('success', 'Pengaduan berhasil diperbarui.');
     }
 
+    /** Memperbarui status pengaduan dengan salah satu status yang diizinkan. */
     public function updateStatus(Request $request, Pengaduan $pengaduan)
     {
         $validated = $request->validate([
@@ -135,7 +143,7 @@ class PengaduanController extends Controller
             ->with('success', 'Status pengaduan berhasil diperbarui.');
     }
 
-    // Menghapus pengaduan
+    /** Menghapus pengaduan dan lampiran yang terkait dengannya. */
     public function destroy(Pengaduan $pengaduan)
     {
         if ($pengaduan->lampiran) {
@@ -149,6 +157,10 @@ class PengaduanController extends Controller
             ->with('success', 'Pengaduan berhasil dihapus.');
     }
 
+    /**
+     * Memvalidasi data pengaduan; status hanya divalidasi saat diminta.
+     * Meja pengaduan yang sedang diedit tetap diizinkan meski tak lagi menjadi pilihan baru.
+     */
     private function validatePengaduan(
         Request $request,
         bool $includeStatus = false,
@@ -167,7 +179,7 @@ class PengaduanController extends Controller
                     ...($pengaduan?->nomor_meja ? [$pengaduan->nomor_meja] : []),
                 ])),
             ],
-            'kategori' => ['required', 'string', 'max:100', Rule::in(Pengaduan::CATEGORIES)],
+            'kategori' => ['required', 'string', 'max:100', Rule::in(Kategori::pluck('name')->all())],
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string|max:10000',
             'lampiran' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',

@@ -11,16 +11,19 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    /** Menampilkan halaman formulir masuk. */
     public function showLogin()
     {
         return view('login');
     }
 
+    /** Menampilkan halaman pendaftaran customer. */
     public function showRegister()
     {
         return view('register');
     }
 
+    /** Memvalidasi pendaftaran, membuat akun customer, lalu langsung masuk. */
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -37,6 +40,7 @@ class AuthController extends Controller
         ];
 
         if (Schema::hasColumn('users', 'username')) {
+            // Buat username unik hanya jika skema database menyediakan kolomnya.
             $baseUsername = Str::slug(Str::before($validated['email'], '@')) ?: 'customer';
             $username = $baseUsername;
             $suffix = 1;
@@ -55,6 +59,7 @@ class AuthController extends Controller
         return redirect()->route('dashboard.customer');
     }
 
+    /** Memeriksa kredensial dan mengarahkan pengguna sesuai perannya. */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -77,6 +82,7 @@ class AuthController extends Controller
             ->onlyInput('email');
     }
 
+    /** Mengakhiri sesi login dan memperbarui token CSRF sesi. */
     public function logout(Request $request)
     {
         Auth::logout();

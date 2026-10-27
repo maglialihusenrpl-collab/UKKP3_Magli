@@ -1,3 +1,4 @@
+{{-- Form pendaftaran akun customer dengan konfirmasi kata sandi. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>

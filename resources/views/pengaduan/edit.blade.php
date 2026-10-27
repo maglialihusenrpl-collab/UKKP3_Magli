@@ -1,3 +1,4 @@
+{{-- Form admin untuk memperbarui data pengaduan; lampiran baru bersifat opsional. --}}
 @extends('layouts.app')
 
 @section('title', 'Edit Pengaduan')
@@ -45,6 +46,7 @@
         <p class="page-description">Perbarui informasi pengaduan. Ubah status dari tabel pengaduan.</p>
 
         <section class="card">
+            {{-- PUT menandai pembaruan data; unggahan file memakai encoding multipart. --}}
             <form method="POST" action="{{ route('pengaduan.update', $pengaduan) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -76,8 +78,8 @@
                     <div class="form-field">
                         <label for="kategori">Kategori</label>
                         <select id="kategori" name="kategori" required>
-                            @foreach (\App\Models\Pengaduan::CATEGORIES as $kategori)
-                                <option value="{{ $kategori }}" @selected(old('kategori', $pengaduan->kategori) === $kategori)>{{ $kategori }}</option>
+                            @foreach ($kategoris as $kategori)
+                                <option value="{{ $kategori->name }}" @selected(old('kategori', $pengaduan->kategori) === $kategori->name)>{{ $kategori->name }}</option>
                             @endforeach
                         </select>
                         @error('kategori') <span class="form-error">{{ $message }}</span> @enderror

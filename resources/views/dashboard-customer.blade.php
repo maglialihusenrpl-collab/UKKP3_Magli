@@ -1,3 +1,4 @@
+{{-- Dashboard customer: hanya menampilkan ringkasan dan pengaduan milik pengguna aktif. --}}
 @extends('layouts.app')
 
 @section('title', 'Dashboard Customer')
@@ -55,6 +56,7 @@
 @endpush
 
 @section('content')
+    {{-- Ringkasan status diambil dari pengaduan milik customer yang sedang masuk. --}}
     <div class="dashboard-heading">
         <div>
             <h1 class="page-title">Dashboard Customer</h1>
@@ -82,6 +84,7 @@
         </article>
     </section>
 
+    {{-- Daftar di bawah menampilkan perkembangan serta lampiran pengaduan customer. --}}
     <section class="card">
         <h2>Pengaduan saya</h2>
         <div class="table-wrap">

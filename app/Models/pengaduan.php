@@ -4,14 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model laporan pengaduan beserta pilihan nomor meja yang tersedia.
+ */
 class Pengaduan extends Model
 {
-    public const CATEGORIES = [
-        'Pesanan',
-        'Pembayaran',
-        'Pengiriman',
-    ];
-
+    // Nomor meja yang dapat dipilih customer saat membuat pengaduan.
     public const TABLE_NUMBERS = [
         'Meja 1',
         'Meja 2',
@@ -25,6 +23,7 @@ class Pengaduan extends Model
         'Meja 10',
     ];
 
+    // Atribut pengaduan yang dapat disimpan melalui mass assignment.
     protected $fillable = [
         'nama_pelapor',
         'email',

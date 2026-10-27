@@ -1,4 +1,5 @@
 
+{{-- Kerangka bersama halaman setelah login: navigasi, konten, dan aset tampilan. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -47,6 +48,8 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
+            min-height: 0;
+            overflow-y: auto;
         }
 
         .navbar-menu a {
@@ -273,6 +276,7 @@
                     @else
                         <a href="{{ route('pengaduan.create') }}">Buat pengaduan</a>
                     @endif
+                    <a href="{{ route('kategori.index') }}">Tabel kategori</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="logout-button">Logout</button>

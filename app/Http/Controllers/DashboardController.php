@@ -6,6 +6,7 @@ use App\Models\Pengaduan;
 
 class DashboardController extends Controller
 {
+    /** Mengarahkan pengguna yang sudah masuk ke dashboard sesuai peran. */
     public function redirectByRole()
     {
         return redirect()->route(
@@ -13,6 +14,7 @@ class DashboardController extends Controller
         );
     }
 
+    /** Menyediakan ringkasan seluruh pengaduan untuk dashboard admin. */
     public function index()
     {
         $totalPengaduan = Pengaduan::count();
@@ -32,6 +34,7 @@ class DashboardController extends Controller
         ));
     }
 
+    /** Menyediakan ringkasan dan daftar pengaduan milik customer yang masuk. */
     public function customer()
     {
         abort_unless(auth()->user()->role === 'customer', 403);

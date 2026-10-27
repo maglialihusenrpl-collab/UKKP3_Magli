@@ -1,3 +1,4 @@
+{{-- Tabel pengelolaan pengaduan admin, termasuk lampiran, perubahan status, dan aksi. --}}
 @extends('layouts.app')
 
 @section('title', 'Daftar Pengaduan')
@@ -97,6 +98,7 @@
         @if (session('success'))
             <div class="flash-message" role="status">{{ session('success') }}</div>
         @endif
+        {{-- Kolom tindakan ditampilkan khusus untuk admin yang berwenang. --}}
         <div class="table-wrap">
             <table class="data-table" data-datatable data-order-column="7">
                 <thead>

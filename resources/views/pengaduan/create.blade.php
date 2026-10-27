@@ -1,3 +1,4 @@
+{{-- Form customer untuk menyampaikan pengaduan baru dan mengunggah lampiran opsional. --}}
 @extends('layouts.app')
 
 @section('title', 'Buat Pengaduan')
@@ -109,6 +110,7 @@
         @endif
 
         <section class="card">
+            {{-- multipart/form-data diperlukan agar file lampiran ikut terkirim. --}}
             <form method="POST" action="{{ route('pengaduan.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-grid">
@@ -162,8 +164,8 @@
                         <label for="kategori">Kategori</label>
                         <select id="kategori" name="kategori" required>
                             <option value="">Pilih kategori</option>
-                            @foreach (\App\Models\Pengaduan::CATEGORIES as $kategori)
-                                <option value="{{ $kategori }}" @selected(old('kategori') === $kategori)>{{ $kategori }}</option>
+                            @foreach ($kategoris as $kategori)
+                                <option value="{{ $kategori->name }}" @selected(old('kategori') === $kategori->name)>{{ $kategori->name }}</option>
                             @endforeach
                         </select>
                         @error('kategori') <span class="form-error">{{ $message }}</span> @enderror

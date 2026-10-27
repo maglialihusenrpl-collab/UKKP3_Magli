@@ -1,4 +1,5 @@
 
+{{-- Form autentikasi pengguna; kesalahan validasi ditampilkan di atas form. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
